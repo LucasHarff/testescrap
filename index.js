@@ -71,7 +71,7 @@ function renderScrapss() {
 
   for (const scrap of scraps) {
     let position = scraps.indexOf(scrap);
-    scrapsField.innerHTML = createScrapCard(
+    scrapsField.innerHTML += createScrapCard(
       scrap.title,
       scrap.message,
       position
@@ -85,15 +85,14 @@ function saveChanges(position) {
   if (!editMessageTitle.value || !editMessageBody.value) {
     return alert("Todos os campos devem ser preenchidos!");
   }
-  title;
-  message;
+  scraps[position].title = title;
+  scraps[position].message = message;
 
-  editTitleInput = title;
-  editMessageInput = message;
-
-  scraps.push({ title, message });
+  editTitleInput[(position, 0)] = title;
+  editMessageInput[(position, 0)] = message;
 
   renderScrapss();
 }
 
 addButton.onclick = addNewScrap;
+btnSaveEdit.onclick = saveChanges;
