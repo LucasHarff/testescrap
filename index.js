@@ -66,18 +66,7 @@ function openEditModal(position) {
 
   btnSaveEdit.setAttribute("onclick", `saveChanges(${position})`);
 }
-function renderScrapss() {
-  scrapsField.innerHTML = "";
 
-  for (const scrap of scraps) {
-    let position = scraps.indexOf(scrap);
-    scrapsField.innerHTML += createScrapCard(
-      scrap.title,
-      scrap.message,
-      position
-    );
-  }
-}
 function saveChanges(position) {
   let title = editTitleInput.value;
   let message = editMessageInput.value;
@@ -91,7 +80,7 @@ function saveChanges(position) {
   editTitleInput[(position, 0)] = title;
   editMessageInput[(position, 0)] = message;
 
-  renderScrapss();
+  renderScraps();
 }
 
 addButton.onclick = addNewScrap;
