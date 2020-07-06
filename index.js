@@ -47,7 +47,7 @@ function createScrapCard(title, message, position) {
     </p>
   </div>
   <div class="w100 d-flex justify-content-end pr-2 pb-2">
-    <button class="btn btn-danger mr-1">Deletar</button>
+    <button class="btn btn-danger mr-1" onclick="deleteCards(${position})" >Excluir</button>
     <button class="btn btn-info"
     onclick="openEditModal(${position})"
     >
@@ -79,6 +79,12 @@ function saveChanges(position) {
 
   editTitleInput[(position, 0)] = title;
   editMessageInput[(position, 0)] = message;
+
+  renderScraps();
+}
+
+function deleteCards(position) {
+  scraps.splice(position, 1);
 
   renderScraps();
 }
