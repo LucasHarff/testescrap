@@ -7,7 +7,11 @@ class TaskList {
 
     this.scraps = [];
 
-    this.registerEvents();
+    this.setAddButtonEvent();
+  }
+
+  generateScrapId() {
+    return this.scraps.lenght + 1;
   }
 
   setAddButtonEvent() {
@@ -15,20 +19,32 @@ class TaskList {
   }
 
   setButtonEvents() {
-    console.log(document.querySelectorAll(".delete-button"));
+    console.log(
+      document.querySelectorAll(".delete-button").forEach((item) => {
+        item.onclick = (event) => this.deleteScraps(event);
+      })
+    );
   }
 
   renderScraps() {
     this.scrapsField.innerHTML = "";
 
     for (const scrap of this.scraps) {
-      let position = scraps.indexOf(scrap);
-      this.scrapsField.innerHTML += this.createScrapCard(
+      const cardHtml = this.createScrapCard(
+        scrap.id,
         scrap.title,
-        scrap.message,
-        position
+        scrap.message
       );
+
+      this.insertHtml(cardHtml);
     }
+    this.setButtonEvents();
+  }
+
+  generateScrap(id, title, message) {
+    const cardHtml = this.createScrapCard(id, title, message);
+
+    this.insertHtml(cardHtml);
     this.setButtonEvents();
   }
 
@@ -39,20 +55,33 @@ class TaskList {
     this.titleInput.value = "";
     this.messageInput.value = "";
 
-    this.scraps.push({ title, message });
+    const id = this.generateScrapId();
+
+    this.scraps.push({ id, title, message });
+
+    this.generateScrap(id, title, message);
 
     this.renderScraps();
   }
 
-  deleteScrap(position) {
-    this.scraps.splice(position, 1);
+  deleteScraps(event) {
+    event.path[2].remove();
 
-    this.renderScraps();
+    const scrapId = event.path[2].getAttribute("id-scrap");
+
+    const scrapIndex = this.scraps.findIndex((scrap) => {
+      return scrap.id == scrapId;
+    });
+    this.scraps.splice(scrapIndex, 1);
   }
 
-  createScrapCard(title, message) {
+  insertHtml(html) {
+    this.scrapsField.innerHTML += html;
+  }
+
+  createScrapCard(id, title, message) {
     return `
-      <div class="message-cards card text-white bg-dark m-2 col-3">
+      <div class="message-cards card text-white bg-dark m-2 col-3 id-scrap="${id}">
         <div class="card-header font-weight-bold">${title}</div>
         <div class="card-body">
           <p class="card-text">
