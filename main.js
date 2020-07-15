@@ -1,9 +1,12 @@
 class TaskList {
   constructor() {
     this.titleInput = document.getElementById("messageTitle");
+    this.editTitleImput = document.getElementById("editMessageTitle");
     this.messageInput = document.getElementById("messageBody");
+    this.editMessageInput = document.getElementById("editMessageBody");
     this.addButton = document.getElementById("addButton");
     this.scrapsField = document.getElementById("scrapsField");
+    this.btnSaveEdit = document.getElementById("saveEdit");
 
     this.scraps = [];
 
@@ -19,11 +22,13 @@ class TaskList {
   }
 
   setButtonEvents() {
-    console.log(
-      document.querySelectorAll(".delete-button").forEach((item) => {
-        item.onclick = (event) => this.deleteScraps(event);
-      })
-    );
+    document.querySelectorAll(".delete-button").forEach((item) => {
+      item.onclick = (event) => this.deleteScraps(event);
+    });
+
+    document.querySelectorAll(".edit-button").forEach((item) => {
+      item.onclick = (event) => this.openEditModal(event);
+    });
   }
 
   renderScraps() {
@@ -75,6 +80,15 @@ class TaskList {
     this.scraps.splice(scrapIndex, 1);
   }
 
+  openEditModal(event) {
+    $("#editModal").modal("toggle");
+
+    // this.editTitleInput.value = scraps[position].title;
+    // this.editMessageInput.value = scraps[position].message;
+
+    // btnSaveEdit.setAttribute("onclick", `saveChanges(${position})`);
+  }
+
   insertHtml(html) {
     this.scrapsField.innerHTML += html;
   }
@@ -90,7 +104,7 @@ class TaskList {
         </div>
         <div class="w-100 d-flex justify-content-end pr-2 pb-2">
           <button class="btn btn-danger mr-1 delete-button">Deletar</button>
-          <button class="btn btn-info">Editar</button>
+          <button class="btn btn-info edit-button">Editar</button>
         </div>
       </div>
     `;
