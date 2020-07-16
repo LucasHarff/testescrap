@@ -1,7 +1,7 @@
 class TaskList {
   constructor() {
     this.titleInput = document.getElementById("messageTitle");
-    this.editTitleImput = document.getElementById("editMessageTitle");
+    this.editTitleInput = document.getElementById("editMessageTitle");
     this.messageInput = document.getElementById("messageBody");
     this.editMessageInput = document.getElementById("editMessageBody");
     this.addButton = document.getElementById("addButton");
@@ -14,7 +14,7 @@ class TaskList {
   }
 
   generateScrapId() {
-    return this.scraps.lenght + 1;
+    return this.scraps.length + 1;
   }
 
   setAddButtonEvent() {
@@ -35,14 +35,9 @@ class TaskList {
     this.scrapsField.innerHTML = "";
 
     for (const scrap of this.scraps) {
-      const cardHtml = this.createScrapCard(
-        scrap.id,
-        scrap.title,
-        scrap.message
-      );
-
-      this.insertHtml(cardHtml);
+      this.generateScrap(scrap.id, scrap.title, scrap.message);
     }
+
     this.setButtonEvents();
   }
 
@@ -65,8 +60,10 @@ class TaskList {
     this.scraps.push({ id, title, message });
 
     this.generateScrap(id, title, message);
+  }
 
-    this.renderScraps();
+  insertHtml(html) {
+    this.scrapsField.innerHTML += html;
   }
 
   deleteScraps(event) {
@@ -77,25 +74,38 @@ class TaskList {
     const scrapIndex = this.scraps.findIndex((scrap) => {
       return scrap.id == scrapId;
     });
+
     this.scraps.splice(scrapIndex, 1);
   }
 
   openEditModal(event) {
     $("#editModal").modal("toggle");
 
-    // this.editTitleInput.value = scraps[position].title;
-    // this.editMessageInput.value = scraps[position].message;
+    const scrapId = event.path[2].getAttribute("id-scrap");
 
-    // btnSaveEdit.setAttribute("onclick", `saveChanges(${position})`);
+    const scrapIndex = this.scraps.findIndex((scrap) => {
+      return scrap.id == scrapId;
+    });
+
+    this.editTitleInput.value = this.scraps[scrapIndex].title;
+    this.editMessageInput.value = this.scraps[scrapIndex].message;
+
+    this.btnSaveEdit.onclick = () => this.saveChanges(scrapIndex);
   }
 
-  insertHtml(html) {
-    this.scrapsField.innerHTML += html;
+  saveChanges(scrapIndex) {
+    let title = this.editTitleInput.value;
+    let message = this.editMessageInput.value;
+
+    this.scraps[scrapIndex] = { title, message };
+    this.renderScraps();
+
+    $("#editModal").modal("hide");
   }
 
   createScrapCard(id, title, message) {
     return `
-      <div class="message-cards card text-white bg-dark m-2 col-3 id-scrap="${id}">
+      <div class="message-cards card text-white bg-dark m-2 col-3" id-scrap="${id}">
         <div class="card-header font-weight-bold">${title}</div>
         <div class="card-body">
           <p class="card-text">
